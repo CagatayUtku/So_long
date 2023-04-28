@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 06:43:56 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/27 10:53:53 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/04/28 17:28:54 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	moves(mlx_key_data_t k_data, void *param)
 	t_game	*game;
 
 	game = param;
-	if (k_data.action == MLX_PRESS)
+	if (k_data.action == MLX_PRESS || k_data.action == MLX_REPEAT)
 	{
 		if (k_data.key == MLX_KEY_ESCAPE)
 			mlx_close_window(game->mlx);
@@ -43,8 +43,10 @@ int	player_movement(t_game *game, int i, int j)
 		if (game->map[i][j] == 'C')
 		{
 			game->collectible--;
-			remove_collectible(game, i, j);
+			remove_collectible(game, &game->keys, i, j);
 		}
+		if (game->map[i][j] == 'X')
+			mlx_close_window(game->mlx);
 		game->map[game->pl_pos[0]][game->pl_pos[1]] = 0;
 		game->map[i][j] = 'P';
 		game->pl_pos[0] = i;
@@ -54,43 +56,12 @@ int	player_movement(t_game *game, int i, int j)
 	return (0);
 }
 
-void	init_images(t_game *map)
+void	generic_loop(void *param)
 {
-	t_collect	*temp;
+	t_game *game;
+	
 
-	map->mlx = mlx_init(map->width * 64, map->height * 64, "so_long", 1);
-	if (!map->mlx)
-		return ;
-	map->bg = xpm_to_image(map, "./images/bg.xpm42");
-	map->pl = xpm_to_image(map, "./images/player.xpm42");
-	map->tree = xpm_to_image(map, "./images/tree.xpm42");
-	temp = map->keys;
-	while (temp)
-	{
-		temp->collectible = xpm_to_image(map, "./images/key.xpm42");
-		temp = temp->next;
-	}
-}
-
-void	put_images(t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	while (++i < game->height)
-	{
-		j = -1;
-		while (++j < game->width)
-		{
-			mlx_image_to_window(game->mlx, game->bg, j * 64, i * 64);
-			if (game->map[i][j] == '1')
-				mlx_image_to_window(game->mlx, game->tree, j * 64, i * 64);
-			if (game->map[i][j] == 'C')
-				mlx_image_to_window(game->mlx, which_collectible(game, i, j), j * 64, i * 64);
-		}
-	}
-	mlx_image_to_window(game->mlx, game->pl, game->pl_pos[1] * 64, game->pl_pos[0] * 64);
+	game = param;
 }
 
 int	main(int argc, char **argv)
@@ -98,13 +69,12 @@ int	main(int argc, char **argv)
 	t_game	map;
 	t_queue	*front;
 	t_queue	*rear;
-	int		i;
-	int		j;
 	int		fd;
 
 	front = NULL;
 	rear = NULL;
 	map.keys = NULL;
+	map.enemys = NULL;
 	if (argc == 2)
 	{
 		fd = open_file(argv[1]);
@@ -112,9 +82,11 @@ int	main(int argc, char **argv)
 		fd = open_file(argv[1]);
 		create_map(&map, fd);
 		is_valid_chars(&map);
-		bfs(&map, &front, &rear);
+		bfs(&map, &front, &rear, 'E');
+		init_images(&map);
 		put_images(&map);
 		mlx_key_hook(map.mlx, &moves, &map);
+		mlx_loop_hook(map.mlx, &generic_loop, &map);
 		mlx_loop(map.mlx);
 		mlx_terminate(map.mlx);
 	}

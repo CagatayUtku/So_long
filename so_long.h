@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 07:46:31 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/27 10:45:46 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/04/28 17:33:15 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 # include "MLX42/include/MLX42/MLX42.h"
 
-# define CHAR_SET "CEP10"
+# define CHAR_SET "CEP10X"
 # define W_INPUT "Wrong input, map can only have 'C''E''P''1''0' characters.\n"
 # define PLAYER_ERR "PLAYER has to be 1.\n"
 # define EXIT_ERR "EXIT has to be 1.\n"
@@ -43,11 +43,15 @@ typedef struct s_game
 	int		player;
 	int		pl_pos[2];
 	int		exit;
+	int		enemy;
 	mlx_image_t	*bg;
 	mlx_image_t	*pl;
 	mlx_image_t	*tree;
 	mlx_t		*mlx;
 	t_collect	*keys;
+	t_collect	*enemys;
+	t_queue		**enemy_front_road;
+	t_queue		**enemy_rear_road;
 }	t_game;
 
 typedef struct s_queue
@@ -73,19 +77,22 @@ void	error_message(char *str, t_game *map);
 //Queues
 void	enqueue(t_queue **front, t_queue **rear, int *data);
 void	dequeue(t_queue **front);
-int		bfs(t_game *map, t_queue **front, t_queue **rear);
+int		bfs(t_game *map, t_queue **front, t_queue **rear, char last);
 //BFS
-void	printf_shortest(t_game *map, t_parent **parent, int row, int col);
-int	check_right(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map);
-int	check_down(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map);
-int	check_up(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map);
-int	check_left(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map);
+void	printf_shortest(t_game *map, t_parent **parent, int row, int col, char last);
+int	check_right(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
+int	check_down(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
+int	check_up(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
+int	check_left(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
 
 //IMAGES
 mlx_image_t	*xpm_to_image(t_game *game, char *path);
+void	put_images(t_game *game);
+void	init_images(t_game *map);
 
-void	add_collectible(t_game *game, int i, int j);
-void	remove_collectible(t_game *game, int i, int j);
-mlx_image_t	*which_collectible(t_game *game, int i, int j);
-int	player_movement(t_game *game, int i, int j);
+void	add_collectible(t_collect **first, int i, int j);
+void	remove_collectible(t_game *game, t_collect **first, int i, int j);
+mlx_image_t	*which_collectible(t_collect **first, int i, int j);
+int			player_movement(t_game *game, int i, int j);
+
 #endif

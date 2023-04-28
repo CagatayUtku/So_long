@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:11:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/27 10:41:17 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/04/28 17:07:07 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	is_valid_chars(t_game *map)
 		error_message(EXIT_ERR, map);
 	if (map->collectible < 1)
 		error_message(COLLECT_ERR, map);
+	if (map->enemy < 1)
+		error_message(PLAYER_ERR, map);
 	return (1);
 }
 
@@ -47,7 +49,12 @@ void	is_valid_map(t_game *map, int i, int j)
 		else if (map->map[i][j] == 'C')
 		{
 			map->collectible++;
-			add_collectible(map, i, j);
+			add_collectible(&map->keys, i, j);
+		}
+		else if (map->map[i][j] == 'X')
+		{
+			map->enemy++;
+			add_collectible(&map->enemys, i, j);
 		}
 		else if (map->map[i][j] == 'E')
 			map->exit++;
