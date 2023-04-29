@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 04:03:46 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/28 17:29:37 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/04/29 06:16:38 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	check_left(t_queue **front, t_queue **rear, t_parent **parent, int **visited
 		parent[temp[0]][temp[1]].j = (*front)->data[1];
 		enqueue(front, rear, temp);
 		if (map->map[temp[0]][temp[1]] == last)
-			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last), 1);
+			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last),1);
 	}
 	return (0);
 }
@@ -126,7 +126,7 @@ int	check_right(t_queue **front, t_queue **rear, t_parent **parent, int **visite
 		parent[temp[0]][temp[1]].j = (*front)->data[1];
 		enqueue(front, rear, temp);
 		if (map->map[temp[0]][temp[1]] == last)
-			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last), 1);
+			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last),1);
 	}
 	return (0);
 }
@@ -143,7 +143,7 @@ int	check_up(t_queue **front, t_queue **rear, t_parent **parent, int **visited, 
 		parent[temp[0]][temp[1]].j = (*front)->data[1];
 		enqueue(front, rear, temp);
 		if (map->map[temp[0]][temp[1]] == last)
-			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last), 1);
+			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last),1);
 	}
 	return (0);
 }
@@ -161,7 +161,7 @@ int	check_down(t_queue **front, t_queue **rear, t_parent **parent, int **visited
 		parent[temp[0]][temp[1]].j = (*front)->data[1];
 		enqueue(front, rear, temp);
 		if (map->map[temp[0]][temp[1]] == last)
-			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last), 1);
+			return (printf_shortest(map, parent, (*front)->data[0], temp[1], last),1);
 	}
 	return (0);
 }
@@ -169,15 +169,27 @@ int	check_down(t_queue **front, t_queue **rear, t_parent **parent, int **visited
 void	printf_shortest(t_game *map, t_parent **parent, int row, int col, char last)
 {
 	int	temp;
+	int	data[2];
+	int	i;
+	t_queue *del;
 
-	if (last ==  'X')
+	while (map->front != NULL)
 	{
-		while (parent[row][col].i != -1)
-		{
-			temp = row;
-			printf("(%d,%d)\n", parent[row][col].i, parent[row][col].j);
-			row = parent[row][col].i;
-			col = parent[temp][col].j;
-		}
+		del = map->front;
+		map->front = (map->front)-> next;
+		free(del);
+	}
+	if (last ==  'X' && parent[row][col].i != -1)
+	{
+		map->enemy_road[0] = parent[row][col].i;
+		map->enemy_road[1] = parent[row][col].j;
+		printf("(%d %d)\n",map->enemy_road[0], map->enemy_road[1]);
+		// while (parent[row][col].i != -1)
+		// {
+		// 	temp = row;
+		// 	printf("[%d - %d]", parent[row][col].i, parent[row][col].j);
+		// 	row = parent[row][col].i;
+		// 	col = parent[temp][col].j;
+		// }
 	}
 }

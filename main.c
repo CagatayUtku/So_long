@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 06:43:56 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/28 17:28:54 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/04/29 12:39:44 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,39 @@ int	player_movement(t_game *game, int i, int j)
 void	generic_loop(void *param)
 {
 	t_game *game;
-	
+	static int	time = 0;
+	int		num;
 
 	game = param;
+	time++;
+	if (time % 30 == 0)
+	{
+		bfs(game, &game->front, &game->rear, 'X');
+		printf("%d - %d \n", game->enemys->cord[0], game->enemy_road[0]);
+		printf("%d - %d \n", game->enemys->cord[1], game->enemy_road[1]);
+		if (game->enemys->cord[0] != game->enemy_road[0])
+		{
+			if (game->enemys->cord[1] == game->pl_pos[1] && game->enemys->cord[0] == game->pl_pos[0])
+				mlx_close_window(game->mlx);
+			num =  game->enemy_road[0] - game->enemys->cord[0];
+			which_collectible(&game->enemys, game->enemys->cord[0], game->enemys->cord[1])->instances->y += 64 * num;
+			game->map[game->enemys->cord[0]][game->enemys->cord[1]] = '0';
+			game->enemys->cord[1] = game->enemy_road[1];
+			game->enemys->cord[0] = game->enemy_road[0];
+			game->map[game->enemys->cord[0]][game->enemys->cord[1]] = 'X';
+		}
+		if (game->enemys->cord[1] != game->enemy_road[1])
+		{
+			if (game->enemys->cord[1] == game->pl_pos[1] && game->enemys->cord[0] == game->pl_pos[0])
+				mlx_close_window(game->mlx);
+			num = game->enemy_road[1] - game->enemys->cord[1];
+			which_collectible(&game->enemys, game->enemys->cord[0], game->enemys->cord[1])->instances->x += 64 * num;
+			game->map[game->enemys->cord[0]][game->enemys->cord[1]] = '0';
+			game->enemys->cord[1] = game->enemy_road[1];
+			game->enemys->cord[0] = game->enemy_road[0];
+			game->map[game->enemys->cord[0]][game->enemys->cord[1]] = 'X';
+		}
+	}
 }
 
 int	main(int argc, char **argv)
@@ -71,8 +101,8 @@ int	main(int argc, char **argv)
 	t_queue	*rear;
 	int		fd;
 
-	front = NULL;
-	rear = NULL;
+	map.front = NULL;
+	map.rear = NULL;
 	map.keys = NULL;
 	map.enemys = NULL;
 	if (argc == 2)
@@ -82,7 +112,7 @@ int	main(int argc, char **argv)
 		fd = open_file(argv[1]);
 		create_map(&map, fd);
 		is_valid_chars(&map);
-		bfs(&map, &front, &rear, 'E');
+		bfs(&map, &map.front, &map.rear, 'E');
 		init_images(&map);
 		put_images(&map);
 		mlx_key_hook(map.mlx, &moves, &map);

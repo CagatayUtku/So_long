@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 07:46:31 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/28 17:33:15 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/04/29 05:26:40 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ typedef struct s_collect
 	struct s_collect	*next;
 }	t_collect;
 
+typedef struct s_queue
+{
+	int	data[2];
+	struct s_queue *next;
+}	t_queue;
+
 typedef struct s_game
 {
 	char	**map;
@@ -44,21 +50,16 @@ typedef struct s_game
 	int		pl_pos[2];
 	int		exit;
 	int		enemy;
+	t_queue	*front;
+	t_queue	*rear;
 	mlx_image_t	*bg;
 	mlx_image_t	*pl;
 	mlx_image_t	*tree;
 	mlx_t		*mlx;
 	t_collect	*keys;
 	t_collect	*enemys;
-	t_queue		**enemy_front_road;
-	t_queue		**enemy_rear_road;
+	int		enemy_road[2];
 }	t_game;
-
-typedef struct s_queue
-{
-	int	data[2];
-	struct s_queue *next;
-}	t_queue;
 
 typedef struct s_parent
 {
