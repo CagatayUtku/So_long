@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 03:35:26 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/27 10:43:09 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/01 23:07:54 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ void	enqueue(t_queue **front, t_queue **rear, int *data)
 
 	new = NULL;
 	new = (t_queue *)malloc(sizeof(t_queue));
+	if (!new)
+	{
+		perror ("malloc");
+		exit (EXIT_FAILURE);
+	}
 	new->data[0] = data[0];
 	new->data[1] = data[1];
 	new->next = NULL;

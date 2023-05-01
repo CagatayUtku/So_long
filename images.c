@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 10:27:11 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/28 17:06:40 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/01 22:55:33 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,24 @@ mlx_image_t	*xpm_to_image(t_game *game, char *path)
 
 void	init_images(t_game *map)
 {
-	t_collect	*temp;
+	t_object	*temp;
 
-	map->mlx = mlx_init(map->width * 64, map->height * 64, "so_long", 1);
+	map->mlx = mlx_init(map->width * 80, map->height * 80, "so_long", 1);
 	if (!map->mlx)
 		return ;
-	map->bg = xpm_to_image(map, "./images/bg.xpm42");
-	map->pl = xpm_to_image(map, "./images/player.xpm42");
-	map->tree = xpm_to_image(map, "./images/tree.xpm42");
-	temp = map->keys;
+	map->bg = xpm_to_image(map, "./images/bcg.xpm42");
+	map->pl = xpm_to_image(map, "./images/pl1.xpm42");
+	map->wall = xpm_to_image(map, "./images/box.xpm42");
+	temp = map->collect;
 	while (temp)
 	{
-		temp->collectible = xpm_to_image(map, "./images/key.xpm42");
+		temp->image = xpm_to_image(map, "./images/collect.xpm42");
 		temp = temp->next;
 	}
 	temp = map->enemys;
 	while (temp)
 	{
-		temp->collectible = xpm_to_image(map, "./images/en_down.xpm42");
+		temp->image = xpm_to_image(map, "./images/enemy_left.xpm42");
 		temp = temp->next;
 	}
 }
@@ -76,14 +76,22 @@ void	put_images(t_game *game)
 		j = -1;
 		while (++j < game->width)
 		{
-			mlx_image_to_window(game->mlx, game->bg, j * 64, i * 64);
+			mlx_image_to_window(game->mlx, game->bg, j * 80, i * 80);
 			if (game->map[i][j] == '1')
-				mlx_image_to_window(game->mlx, game->tree, j * 64, i * 64);
+				mlx_image_to_window(game->mlx, game->wall, j * 80, i * 80);
 			if (game->map[i][j] == 'C')
-				mlx_image_to_window(game->mlx, which_collectible(&game->keys, i, j), j * 64, i * 64);
-			if (game->map[i][j] == 'X')
-				mlx_image_to_window(game->mlx, which_collectible(&game->enemys, i, j), j * 64, i * 64);
+				mlx_image_to_window(game->mlx, which_object(&game->collect, i, j), j * 80, i * 80);
 		}
 	}
-	mlx_image_to_window(game->mlx, game->pl, game->pl_pos[1] * 64, game->pl_pos[0] * 64);
+	i = -1;
+	while (++i < game->height)
+	{
+		j = -1;
+		while (++j < game->width)
+		{
+		if (game->map[i][j] == 'X')
+			mlx_image_to_window(game->mlx, which_object(&game->enemys, i, j), j * 80, i * 80);
+		}
+	}
+	mlx_image_to_window(game->mlx, game->pl, game->pl_pos[1] * 80, game->pl_pos[0] * 80);
 }

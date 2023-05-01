@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 07:46:31 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/29 05:26:40 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/01 23:10:29 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,74 +26,71 @@
 # define EXIT_ERR "EXIT has to be 1.\n"
 # define COLLECT_ERR "Collectible has to be at least 1.\n"
 # define WALL_ERR "Map is not surrounded by walls.\n"
+# define ENEMY_ERR "There is no enemy in the game.\n"
 
-typedef struct s_collect
+typedef struct s_object
 {
-	int					cord[2];
-	mlx_image_t			*collectible;
-	struct s_collect	*next;
-}	t_collect;
+	int				cord[2];
+	mlx_image_t		*image;
+	struct s_object	*next;
+}	t_object;
 
 typedef struct s_queue
 {
-	int	data[2];
-	struct s_queue *next;
+	int				data[2];
+	struct s_queue	*next;
 }	t_queue;
 
 typedef struct s_game
 {
-	char	**map;
-	int		width;
-	int		height;
-	int		collectible;
-	int		player;
-	int		pl_pos[2];
-	int		exit;
-	int		enemy;
-	t_queue	*front;
-	t_queue	*rear;
+	char		**map;
+	int			width;
+	int			height;
+	int			num_collect;
+	int			player;
+	int			pl_pos[2];
+	int			exit;
+	int			ex_pos[2];
+	int			num_enemy;
+	int			enemy_road[2];
+	int			**visited;
+	t_queue		*front;
+	t_queue		*rear;
 	mlx_image_t	*bg;
 	mlx_image_t	*pl;
-	mlx_image_t	*tree;
+	mlx_image_t	*wall;
+	mlx_image_t	*en_img;
 	mlx_t		*mlx;
-	t_collect	*keys;
-	t_collect	*enemys;
-	int		enemy_road[2];
+	t_object	*collect;
+	t_object	*enemys;
 }	t_game;
 
-typedef struct s_parent
-{
-	int	i;
-	int	j;
-}	t_parent;
-
-int		open_file(char *map);
-int		width_map(char *line);
-void	free_char_dubleptr(char **ptr, int size);
-void	create_map(t_game *map, int fd);
-void	measure_map(t_game *map, int fd);
-int		is_valid_chars(t_game *map);
-void	is_valid_map(t_game *map, int i, int j);
-void	error_message(char *str, t_game *map);
+int			open_file(char *map);
+int			width_map(char *line);
+void		free_char_dubleptr(char **ptr, int size);
+void		create_map(t_game *map, int fd);
+void		measure_map(t_game *map, int fd);
+int			is_valid_chars(t_game *map);
+void		is_valid_map(t_game *map, int i, int j);
+void		error_message(char *str, t_game *map);
 //Queues
-void	enqueue(t_queue **front, t_queue **rear, int *data);
-void	dequeue(t_queue **front);
-int		bfs(t_game *map, t_queue **front, t_queue **rear, char last);
+void		enqueue(t_queue **front, t_queue **rear, int *data);
+void		dequeue(t_queue **front);
 //BFS
-void	printf_shortest(t_game *map, t_parent **parent, int row, int col, char last);
-int	check_right(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
-int	check_down(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
-int	check_up(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
-int	check_left(t_queue **front, t_queue **rear, t_parent **parent, int **visited, t_game *map, char last);
+int			bfs(t_game *map, int target[2]);
+int			check_neighbors(t_game *map, int i, int j, int target[2]);
+void		clean_bfs(t_game *game);
+void		free_int_dubleptr(int **ptr, int size);
 
 //IMAGES
 mlx_image_t	*xpm_to_image(t_game *game, char *path);
-void	put_images(t_game *game);
-void	init_images(t_game *map);
+void		put_images(t_game *game);
+void		init_images(t_game *map);
 
-void	add_collectible(t_collect **first, int i, int j);
-void	remove_collectible(t_game *game, t_collect **first, int i, int j);
-mlx_image_t	*which_collectible(t_collect **first, int i, int j);
+void		add_object(t_object **first, int i, int j);
+void		remove_object(t_game *game, t_object **first, int i, int j);
+mlx_image_t	*which_object(t_object **first, int i, int j);
 int			player_movement(t_game *game, int i, int j);
+int			is_enemy(t_object *ptr, int i, int j);
 
 #endif

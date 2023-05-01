@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:11:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/28 17:07:07 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/01 23:00:07 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	is_valid_chars(t_game *map)
 	int	i;
 	int	j;
 
-	map->collectible = 0;
+	map->num_collect = 0;
+	map->num_enemy = 0;
 	map->exit = 0;
 	map->player = 0;
 	i = -1;
@@ -31,10 +32,10 @@ int	is_valid_chars(t_game *map)
 		error_message(PLAYER_ERR, map);
 	if (map->exit != 1)
 		error_message(EXIT_ERR, map);
-	if (map->collectible < 1)
+	if (map->num_collect < 1)
 		error_message(COLLECT_ERR, map);
-	if (map->enemy < 1)
-		error_message(PLAYER_ERR, map);
+	if (map->num_enemy < 1)
+		error_message(ENEMY_ERR, map);
 	return (1);
 }
 
@@ -48,16 +49,20 @@ void	is_valid_map(t_game *map, int i, int j)
 			error_message(WALL_ERR, map);
 		else if (map->map[i][j] == 'C')
 		{
-			map->collectible++;
-			add_collectible(&map->keys, i, j);
+			map->num_collect++;
+			add_object(&map->collect, i, j);
 		}
 		else if (map->map[i][j] == 'X')
 		{
-			map->enemy++;
-			add_collectible(&map->enemys, i, j);
+			map->num_enemy++;
+			add_object(&map->enemys, i, j);
 		}
 		else if (map->map[i][j] == 'E')
+		{
 			map->exit++;
+			map->ex_pos[0] = i;
+			map->ex_pos[1] = j;
+		}
 		else if (map->map[i][j] == 'P')
 		{
 			map->player++;
