@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 07:46:31 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/01 23:10:29 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/08 18:52:50 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft/libft.h"
 # include <errno.h>
+# include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -46,23 +47,20 @@ typedef struct s_game
 	char		**map;
 	int			width;
 	int			height;
-	int			num_collect;
-	int			player;
-	int			pl_pos[2];
-	int			exit;
-	int			ex_pos[2];
-	int			num_enemy;
+	int			state;
 	int			enemy_road[2];
 	int			**visited;
 	t_queue		*front;
 	t_queue		*rear;
 	mlx_image_t	*bg;
-	mlx_image_t	*pl;
 	mlx_image_t	*wall;
-	mlx_image_t	*en_img;
+	mlx_image_t	*success;
+	mlx_image_t	*fail;
 	mlx_t		*mlx;
 	t_object	*collect;
 	t_object	*enemys;
+	t_object	*player;
+	t_object	*exit;
 }	t_game;
 
 int			open_file(char *map);
@@ -84,13 +82,17 @@ void		free_int_dubleptr(int **ptr, int size);
 
 //IMAGES
 mlx_image_t	*xpm_to_image(t_game *game, char *path);
+void		img_window(mlx_t *mlx, mlx_image_t	*img, int j, int i);
 void		put_images(t_game *game);
 void		init_images(t_game *map);
 
+void		enemy_move(t_game *game, t_object *m_enemy, int cord[2]);
+int			num_object(t_object *first);
 void		add_object(t_object **first, int i, int j);
 void		remove_object(t_game *game, t_object **first, int i, int j);
 mlx_image_t	*which_object(t_object **first, int i, int j);
 int			player_movement(t_game *game, int i, int j);
 int			is_enemy(t_object *ptr, int i, int j);
+void	free_all(t_game *game);
 
 #endif

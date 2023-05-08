@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 10:27:11 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/01 22:55:33 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/08 19:09:57 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,11 @@ void	init_images(t_game *map)
 	if (!map->mlx)
 		return ;
 	map->bg = xpm_to_image(map, "./images/bcg.xpm42");
-	map->pl = xpm_to_image(map, "./images/pl1.xpm42");
 	map->wall = xpm_to_image(map, "./images/box.xpm42");
+	map->exit->image = xpm_to_image(map, "./images/exit1.xpm42");
+	map->player->image = xpm_to_image(map, "./images/pl1.xpm42");
+	map->success = xpm_to_image(map, "./images/success.xpm42");
+	map->fail = xpm_to_image(map, "./images/fail.xpm42");
 	temp = map->collect;
 	while (temp)
 	{
@@ -67,8 +70,9 @@ void	init_images(t_game *map)
 
 void	put_images(t_game *game)
 {
-	int	i;
-	int	j;
+	int			i;
+	int			j;
+	t_object	*temp;
 
 	i = -1;
 	while (++i < game->height)
@@ -76,22 +80,24 @@ void	put_images(t_game *game)
 		j = -1;
 		while (++j < game->width)
 		{
-			mlx_image_to_window(game->mlx, game->bg, j * 80, i * 80);
+			img_window(game->mlx, game->bg, j, i);
 			if (game->map[i][j] == '1')
-				mlx_image_to_window(game->mlx, game->wall, j * 80, i * 80);
+				img_window(game->mlx, game->wall, j, i);
 			if (game->map[i][j] == 'C')
-				mlx_image_to_window(game->mlx, which_object(&game->collect, i, j), j * 80, i * 80);
+				img_window(game->mlx, which_object(&game->collect, i, j), j, i);
 		}
 	}
-	i = -1;
-	while (++i < game->height)
+	temp = game->enemys;
+	while (temp)
 	{
-		j = -1;
-		while (++j < game->width)
-		{
-		if (game->map[i][j] == 'X')
-			mlx_image_to_window(game->mlx, which_object(&game->enemys, i, j), j * 80, i * 80);
-		}
+		img_window(game->mlx, temp->image, temp->cord[1], temp->cord[0]);
+		temp = temp->next;
 	}
-	mlx_image_to_window(game->mlx, game->pl, game->pl_pos[1] * 80, game->pl_pos[0] * 80);
+	temp = game->player;
+	img_window(game->mlx, temp->image, temp->cord[1], temp->cord[0]);
+}
+
+void	img_window(mlx_t *mlx, mlx_image_t	*img, int j, int i)
+{
+	mlx_image_to_window(mlx, img, j * 80, i * 80);
 }

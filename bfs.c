@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 04:03:46 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/01 23:14:04 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/05 19:33:28 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	**create_visited(t_game *map)
 int	bfs(t_game *map, int target[2])
 {
 	map->visited = create_visited(map);
-	map->visited[map->pl_pos[0]][map->pl_pos[1]] = 1;
-	enqueue(&map->front, &map->rear, map->pl_pos);
+	map->visited[map->player->cord[0]][map->player->cord[1]] = 1;
+	enqueue(&map->front, &map->rear, map->player->cord);
 	while (map->front != NULL)
 	{
 		if (check_neighbors(map, -1, 0, target))

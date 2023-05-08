@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 06:43:53 by Cutku             #+#    #+#             */
-/*   Updated: 2023/04/24 11:19:20 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/06 19:05:48 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	measure_map(t_game *map, int fd)
 		ft_putstr_fd("Empty File", 2);
 		exit(EXIT_FAILURE);
 	}
-	close(fd);//for other exits!
+	close(fd);
 }
 
 int	width_map(char *line)
@@ -87,7 +87,6 @@ void	create_map(t_game *map, int fd)
 	if (!map->map)
 	{
 		perror("malloc");
-		close(fd);
 		exit(EXIT_FAILURE);
 	}
 	i = -1;
@@ -100,7 +99,6 @@ void	create_map(t_game *map, int fd)
 		{
 			perror("malloc");
 			free_char_dubleptr(map->map, i);
-			close(fd);
 			exit(EXIT_FAILURE);
 		}
 	}

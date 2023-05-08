@@ -6,7 +6,7 @@
 #    By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/22 06:44:10 by Cutku             #+#    #+#              #
-#    Updated: 2023/04/27 06:14:42 by Cutku            ###   ########.fr        #
+#    Updated: 2023/05/05 20:08:42 by Cutku            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ WHITE = \033[0;97m
 
 .SILENT:
 
-SO_LNG_SRCS	=	main.c init_map.c error_check.c clean_up.c queue.c bfs.c images.c collectible.c
+SO_LNG_SRCS	=	main.c init_map.c error_check.c clean_up.c queue.c bfs.c images.c objects.c
 SO_LNG_OBJS	=	$(SO_LNG_SRCS:.c=.o)
 
 LIBFT		= ./libft/
@@ -32,7 +32,7 @@ MLX42_LIB	= MLX42/build/libmlx42.a
 
 CC			= cc
 RM			= rm -f
-# CFLAGS		= -Wall -Wextra -Werror 
+CFLAGS		= -g
 
 NAME		= so_long
 
