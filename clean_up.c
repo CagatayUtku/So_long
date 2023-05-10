@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:09:20 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/08 17:39:07 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/09 02:14:08 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,35 +46,35 @@ void	free_all(t_game *game)
 {
 	t_object *del;
 
-	while (game->enemys)
+	while (game->enemys != NULL)
 	{
 		del = game->enemys;
 		game->enemys = game->enemys->next;
 		mlx_delete_image(game->mlx, del->image);
 		free(del);
 	}
-	while (game->collect)
+	while (game->collect != NULL)
 	{
 		del = game->collect;
 		game->collect = game->collect->next;
 		mlx_delete_image(game->mlx, del->image);
 		free(del);
 	}
-	if (game->player)
+	if (game->player != NULL)
 	{
 		del = game->player;
 		game->player = game->player->next;
 		mlx_delete_image(game->mlx, del->image);
 		free(del);
 	}
-	if (game->exit)
+	if (game->exit != NULL)
 	{
 		del = game->exit;
 		game->exit = game->exit->next;
 		mlx_delete_image(game->mlx, del->image);
 		free(del);
+		mlx_delete_image(game->mlx, game->bg);
+		mlx_delete_image(game->mlx, game->wall);
+		free_char_dubleptr(game->map, game->height);
 	}
-	mlx_delete_image(game->mlx, game->bg);
-	mlx_delete_image(game->mlx, game->wall);
-	free_char_dubleptr(game->map, game->height);
 }

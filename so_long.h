@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 07:46:31 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/08 18:52:50 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/09 02:10:43 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ void		remove_object(t_game *game, t_object **first, int i, int j);
 mlx_image_t	*which_object(t_object **first, int i, int j);
 int			player_movement(t_game *game, int i, int j);
 int			is_enemy(t_object *ptr, int i, int j);
-void	free_all(t_game *game);
+void		free_all(t_game *game);
 
 #endif

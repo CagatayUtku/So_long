@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 06:43:56 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/08 19:23:16 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/09 18:58:18 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,37 @@
 void	moves(mlx_key_data_t k_data, void *param)
 {
 	t_game	*game;
-	int		pl_cord[2];
 
 	game = param;
-	pl_cord[0] = game->player->cord[0];
-	pl_cord[1] = game->player->cord[1];
 	if ((k_data.action == MLX_PRESS || k_data.action == MLX_REPEAT))
 	{
 		if (k_data.key == MLX_KEY_ESCAPE)
+		{
+			free_all(game);
 			mlx_close_window(game->mlx);
-		if (k_data.key == MLX_KEY_UP || k_data.key == MLX_KEY_W)
-			if (player_movement(game, pl_cord[0] - 1, pl_cord[1]))
-				game->player->image->instances->y -= 80;
-		if (k_data.key == MLX_KEY_DOWN || k_data.key == MLX_KEY_S)
-			if (player_movement(game, pl_cord[0] + 1, pl_cord[1]))
-				game->player->image->instances->y += 80;
-		if (k_data.key == MLX_KEY_LEFT || k_data.key == MLX_KEY_A)
-			if (player_movement(game, pl_cord[0], pl_cord[1] - 1))
-				game->player->image->instances->x -= 80;
-		if (k_data.key == MLX_KEY_RIGHT || k_data.key == MLX_KEY_D)
-			if (player_movement(game, pl_cord[0], pl_cord[1] + 1))
-				game->player->image->instances->x += 80;
+			exit(0);
+		}
+		if (game->state == 1)
+		{
+			if (k_data.key == MLX_KEY_UP || k_data.key == MLX_KEY_W)
+				if (player_movement(game, game->player->cord[0] - 1, game->player->cord[1]))
+					game->player->image->instances->y -= 80;
+			if (k_data.key == MLX_KEY_DOWN || k_data.key == MLX_KEY_S)
+				if (player_movement(game, game->player->cord[0] + 1, game->player->cord[1]))
+					game->player->image->instances->y += 80;
+			if (k_data.key == MLX_KEY_LEFT || k_data.key == MLX_KEY_A)
+				if (player_movement(game, game->player->cord[0], game->player->cord[1] - 1))
+					game->player->image->instances->x -= 80;
+			if (k_data.key == MLX_KEY_RIGHT || k_data.key == MLX_KEY_D)
+				if (player_movement(game, game->player->cord[0], game->player->cord[1] + 1))
+					game->player->image->instances->x += 80;
+		}
 	}
 }
 
 int	player_movement(t_game *game, int i, int j)
 {
-	if (game->map[i][j] != '1' && game->state == 1)
+	if (game->state == 1 && game->map[i][j] != '1')
 	{
 		if (!is_enemy(game->enemys, i, j))
 		{
@@ -49,20 +53,22 @@ int	player_movement(t_game *game, int i, int j)
 			{
 				remove_object(game, &game->collect, i, j);
 				if (game->collect == NULL)
-					mlx_image_to_window(game->mlx, game->exit->image, game->exit->cord[1] * 80, game->exit->cord[0] * 80);
+					img_window(game->mlx, game->exit->image, game->exit->cord[1], game->exit->cord[0]);
 			}
 			if (game->collect == NULL && (i == game->exit->cord[0] && j == game->exit->cord[1]))
 			{
 				game->state = 0;
 				mlx_delete_image(game->mlx, game->exit->image);
 				game->exit->image = xpm_to_image(game, "./images/exit2.xpm42");
-				mlx_image_to_window(game->mlx, game->exit->image, game->exit->cord[1] * 80, game->exit->cord[0] * 80);
+				img_window(game->mlx, game->exit->image, game->exit->cord[1], game->exit->cord[0]);
 			}
 			game->player->cord[0] = i;
 			game->player->cord[1] = j;
 			return (1);
 		}
-		mlx_close_window(game->mlx);
+		game->state = -1;
+		free_all(game);
+		img_window(game->mlx, game->fail, 1, 1);
 	}
 	return (0);
 }
@@ -83,31 +89,54 @@ void	generic_loop(void *param)
 	t_game		*game;
 	t_object	*m_enemy;
 	static int	time = 0;
+	static int	photo = 0;
 
 	game = param;
 	time++;
 	m_enemy = game->enemys;
-	if (time % 30 == 0)
+	if (time % 15 == 0 && game->state == 1)
 	{
-		if (game->state == 1)
+		photo++;
+		while (m_enemy && photo % 2 != 0)
 		{
+			mlx_delete_image(game->mlx, m_enemy->image);
+			m_enemy->image = xpm_to_image(game, "./images/enemy_right.xpm42");
+			img_window(game->mlx, m_enemy->image, m_enemy->cord[1], m_enemy->cord[0]);
+			m_enemy = m_enemy->next;
+		}
+		if (time % 30 == 0)
+		{
+			m_enemy = game->enemys;
 			while (m_enemy)
 			{
 				bfs(game, m_enemy->cord);
+				mlx_delete_image(game->mlx, m_enemy->image);
+				m_enemy->image = xpm_to_image(game, "./images/enemy_left.xpm42");
+				img_window(game->mlx, m_enemy->image, m_enemy->cord[1], m_enemy->cord[0]);
 				enemy_move(game, m_enemy, m_enemy->cord);
-				m_enemy = m_enemy->next;
+				if (game->state == -1)
+				{
+					m_enemy = NULL;
+				}
+				else
+					m_enemy = m_enemy->next;
 			}
 		}
-		else if (game->state == 0)
+	}
+	else if (time % 20 == 0 && game->state == 0)
+	{
+		if (game->exit->cord[0] > 1)
 		{
-			if (game->exit->cord[0] > 1)
-			{
-				mlx_delete_image(game->mlx, game->player->image);
-				game->exit->image->instances->y -= 80;
-				game->exit->cord[0] -= 1;
-			}
-			else
-				mlx_close_window(game->mlx);
+			if (game->player)
+				remove_object(game, &game->player, game->player->cord[0], game->player->cord[1]);
+			game->exit->image->instances->y -= 80;
+			game->exit->cord[0] -= 1;
+		}
+		else
+		{
+			free_all(game);
+			img_window(game->mlx, game->success, 3, 3);
+			game->state = -1;
 		}
 	}
 }
@@ -129,7 +158,8 @@ void	enemy_move(t_game *game, t_object *m_enemy, int cord[2])
 			if (cord[1] == game->player->cord[1] && cord[0] == pl_cord[0])
 			{
 				game->state = -1;
-				img_window(game->mlx, game->fail, game->width / 2, game->height / 2);
+				free_all(game);
+				img_window(game->mlx, game->fail, 1, 1);
 			}
 		}
 	}
@@ -143,7 +173,8 @@ void	enemy_move(t_game *game, t_object *m_enemy, int cord[2])
 			if (cord[1] == pl_cord[1] && cord[0] == pl_cord[0])
 			{
 				game->state = -1;
-				img_window(game->mlx, game->fail, game->width / 2, game->height / 2);
+				free_all(game);
+				img_window(game->mlx, game->fail, 1, 1);
 			}
 		}
 	}
