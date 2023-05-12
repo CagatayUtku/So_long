@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 06:43:56 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/12 04:59:17 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 19:10:17 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	init_struct(t_game *game)
 	game->front = NULL;
 	game->rear = NULL;
 	game->collect = NULL;
-	game->enemys = NULL;
 	game->player = NULL;
 	game->state = 1;
 	game->num_move = 0;
@@ -45,7 +44,6 @@ int	main(int argc, char **argv)
 		init_images(&game);
 		put_images(&game);
 		mlx_key_hook(game.mlx, &key_loop, &game);
-		mlx_loop_hook(game.mlx, &enemy_loop, &game);
 		mlx_loop(game.mlx);
 		mlx_terminate(game.mlx);
 		free_all(&game);

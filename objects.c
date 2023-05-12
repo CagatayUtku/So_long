@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 04:32:16 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/11 23:12:08 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/13 01:37:13 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	add_object(t_object **first, int i, int j)
 	t_object	*last;
 
 	new = (t_object *)malloc(sizeof(t_object));
+	if (!new)
+		return ;
 	new->cord[0] = i;
 	new->cord[1] = j;
 	new->image = NULL;

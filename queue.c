@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 03:35:26 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/01 23:07:54 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 18:43:44 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ void	dequeue(t_queue **front)
 		free(temp);
 	}
 	else
-		printf("Queue is empty.\n");
+		ft_putstr_fd("Queue is empty.\n", 2);
 }

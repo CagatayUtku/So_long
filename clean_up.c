@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:09:20 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/12 04:37:10 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/13 01:49:48 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	clean_bfs(t_game *game)
 {
-	t_queue	*del;
-
 	while (game->front != NULL)
 		dequeue(&game->front);
 	game->rear = NULL;
@@ -50,7 +48,6 @@ void	free_all(t_game *game)
 		mlx_delete_image(game->mlx, game->wall);
 		free_char_dubleptr(game->map, game->height);
 	}
-	free_objects(game, &game->enemys);
 	free_objects(game, &game->collect);
 	free_objects(game, &game->player);
 	free_objects(game, &game->exit);

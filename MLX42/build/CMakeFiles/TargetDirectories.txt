@@ -1,0 +1,3 @@
+/Users/cutku/Projects/so_long/MLX42/build/CMakeFiles/mlx42.dir
+/Users/cutku/Projects/so_long/MLX42/build/CMakeFiles/edit_cache.dir
+/Users/cutku/Projects/so_long/MLX42/build/CMakeFiles/rebuild_cache.dir

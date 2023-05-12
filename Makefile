@@ -6,7 +6,7 @@
 #    By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/22 06:44:10 by Cutku             #+#    #+#              #
-#    Updated: 2023/05/12 04:16:30 by Cutku            ###   ########.fr        #
+#    Updated: 2023/05/13 01:49:24 by Cutku            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,13 @@ WHITE = \033[0;97m
 
 .SILENT:
 
-SO_LNG_SRCS	=	main.c init_map.c error_check.c clean_up.c queue.c bfs.c images.c objects.c player.c enemy.c
+SO_LNG_SRCS	=	main.c init_map.c error_check.c clean_up.c queue.c bfs.c images.c objects.c player.c
 SO_LNG_OBJS	=	$(SO_LNG_SRCS:.c=.o)
+
+SO_LNG_BNUS_SRCS = so_long_bonus/main.c so_long_bonus/init_map.c so_long_bonus/error_check.c \
+				so_long_bonus/clean_up.c so_long_bonus/queue.c so_long_bonus/bfs.c \
+				so_long_bonus/images.c so_long_bonus/objects.c so_long_bonus/player.c so_long_bonus/enemy.c
+SO_LNG_BNUS_OBJS = $(SO_LNG_BNUS_SRCS:.c=.o)
 
 LIBFT		= ./libft/
 LIBFT_LIB	= ./libft/libft.a
@@ -32,7 +37,7 @@ MLX42_LIB	= MLX42/build/libmlx42.a
 
 CC			= cc
 RM			= rm -f
-CFLAGS		= -g
+CFLAGS		= -Wall -Werror -Wextra
 
 NAME		= so_long
 
@@ -52,6 +57,7 @@ $(MLX42_LIB):
 
 clean:
 	$(RM) $(SO_LNG_OBJS)
+	$(RM) $(SO_LNG_BNUS_OBJS)
 
 fclean: clean
 	make fclean -C $(LIBFT)
@@ -59,4 +65,8 @@ fclean: clean
 
 re:	fclean all
 
-.PHONY:	all clean fclean re
+bonus: $(SO_LNG_BNUS_OBJS) $(LIBFT_LIB) $(MLX42_LIB)
+	$(CC) $(CFLAGS) $(SO_LNG_BNUS_OBJS) $(LIBFT_LIB) $(MLX42_LIB) -o $(NAME) -I MLX42/include -lglfw -L "/Users/$(USER)/.brew/opt/glfw/lib/"
+	echo "$(GREEN)So_long_bonus compiled successfully!$(DEF_COLOR)"
+
+.PHONY:	all clean fclean re bonus

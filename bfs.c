@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 04:03:46 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/05 19:33:28 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/13 01:50:11 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	**create_visited(t_game *map)
 {
 	int	**visited;
 	int	i;
-	int	j;
 
 	visited = (int **)malloc((map->height) * sizeof(int *));
 	if (!visited)
@@ -70,11 +69,7 @@ int	check_neighbors(t_game *game, int i, int j, int target[2])
 		game->visited[temp[0]][temp[1]] = 1;
 		enqueue(&game->front, &game->rear, temp);
 		if (temp[0] == target[0] && temp[1] == target[1])
-		{
-			game->enemy_road[0] = game->front->data[0];
-			game->enemy_road[1] = game->front->data[1];
 			return (1);
-		}
 	}
 	return (0);
 }

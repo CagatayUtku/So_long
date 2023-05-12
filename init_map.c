@@ -6,21 +6,21 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 06:43:53 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/06 19:05:48 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 20:15:37 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	open_file(char *map)
+int	open_file(char *file_name)
 {
 	int	len;
 	int	fd;
 
-	len = ft_strlen(map);
-	if (len > 4 && (ft_strncmp(map + len - 4, ".ber", 4) == 0))
+	len = ft_strlen(file_name);
+	if (len > 4 && (ft_strncmp(file_name + len - 4, ".ber", 4) == 0))
 	{
-		fd = open(map, O_RDONLY);
+		fd = open(file_name, O_RDONLY);
 		if (fd < 0)
 		{
 			perror("Open");

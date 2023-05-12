@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 07:46:31 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/12 05:57:24 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 18:53:04 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,12 @@
 # include <stdio.h>
 # include "MLX42/include/MLX42/MLX42.h"
 
-# define CHAR_SET "CEP10X"
+# define CHAR_SET "CEP10"
 # define W_INPUT "Wrong input, map can only have 'C''E''P''1''0' characters.\n"
 # define PLAYER_ERR "PLAYER has to be 1.\n"
 # define EXIT_NO "There has to be an exit in the game.\n"
 # define COLLECT_ERR "Collectible has to be at least 1.\n"
 # define WALL_ERR "Map is not surrounded by walls.\n"
-# define ENEMY_ERR "There is no enemy in the game.\n"
 # define EXIT_PATH "Exit is unreachable.\n"
 
 typedef struct s_object
@@ -49,20 +48,15 @@ typedef struct s_game
 	int			width;
 	int			height;
 	int			state;
-	int			enemy_road[2];
 	int			**visited;
 	int			num_move;
 	t_queue		*front;
 	t_queue		*rear;
-	mlx_image_t *move;
-	mlx_image_t *score;
 	mlx_image_t	*bg;
 	mlx_image_t	*wall;
 	mlx_image_t	*success;
-	mlx_image_t	*fail;
 	mlx_t		*mlx;
 	t_object	*collect;
-	t_object	*enemys;
 	t_object	*player;
 	t_object	*exit;
 }	t_game;
@@ -88,19 +82,12 @@ mlx_image_t	*xpm_to_image(t_game *game, char *path);
 void		img_window(mlx_t *mlx, mlx_image_t	*img, int j, int i);
 void		put_images(t_game *game);
 void		init_images(t_game *map);
-void		scoreboard(t_game *game);
 //MOVES
 void		key_loop(mlx_key_data_t k_data, void *param);
 int			player_movement(t_game *game, int i, int j);
 void		player_key_press(mlx_key_data_t k_data, t_game *game);
 void		is_collectible(t_game *game, int i, int j);
 void		is_exit(t_game *game, int i, int j);
-//ENEMY
-void		enemy_loop(void *param);
-void		enemy_move(t_game *game, t_object *m_enemy, int cord[2]);
-int			is_enemy(t_object *ptr, int i, int j);
-void		final_animation(t_game *game);
-void		enemy_image_change(t_game *game);
 //OBJECTS
 int			num_object(t_object *first);
 void		add_object(t_object **first, int i, int j);

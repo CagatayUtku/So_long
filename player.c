@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:30:23 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/12 05:58:51 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/13 01:46:46 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	key_loop(mlx_key_data_t k_data, void *param)
 		{
 			free_all(game);
 			mlx_close_window(game->mlx);
+			mlx_delete_image(game->mlx, game->success);
 			exit(EXIT_SUCCESS);
 		}
 		if (game->state == 1)
@@ -53,19 +54,14 @@ int	player_movement(t_game *game, int i, int j)
 {
 	if (game->state == 1 && game->map[i][j] != '1')
 	{
-		if (!is_enemy(game->enemys, i, j))
-		{
-			is_collectible(game, i, j);
-			is_exit(game, i, j);
-			game->player->cord[0] = i;
-			game->player->cord[1] = j;
-			printf("Move : %d\n", ++game->num_move);//
-			scoreboard(game);
-			return (1);
-		}
-		game->state = -1;
-		free_all(game);
-		img_window(game->mlx, game->fail, 1, 1);
+		is_collectible(game, i, j);
+		game->player->cord[0] = i;
+		game->player->cord[1] = j;
+		is_exit(game, i, j);
+		ft_putstr_fd("Move : ", 1);
+		ft_putnbr_fd(++game->num_move, 1);
+		ft_putchar_fd('\n', 1);
+		return (1);
 	}
 	return (0);
 }
@@ -92,8 +88,7 @@ void	is_exit(t_game *game, int i, int j)
 	if (game->collect == NULL && (i == exit->cord[0] && j == exit->cord[1]))
 	{
 		game->state = 0;
-		mlx_delete_image(game->mlx, exit->image);
-		exit->image = xpm_to_image(game, "./images/exit2.xpm42");
-		img_window(game->mlx, exit->image, exit->cord[1], exit->cord[0]);
+		free_all(game);
+		img_window(game->mlx, game->success, 3, 3);
 	}
 }

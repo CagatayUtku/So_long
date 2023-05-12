@@ -6,11 +6,11 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 03:58:37 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/12 04:56:40 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 18:12:17 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "so_long_bonus.h"
 
 void	enemy_loop(void *param)
 {

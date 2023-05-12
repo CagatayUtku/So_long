@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:11:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/11 23:20:04 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 18:45:45 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int	is_valid_chars(t_game *game)
 		error_message(EXIT_NO, game);
 	if (num_object(game->collect) < 1)
 		error_message(COLLECT_ERR, game);
-	if (num_object(game->enemys) < 1)
-		error_message(ENEMY_ERR, game);
 	if (bfs(game, game->exit->cord) == 0)
 		error_message(EXIT_PATH, game);
 	return (1);
@@ -47,8 +45,6 @@ void	is_valid_map(t_game *game, int i, int j)
 			error_message(WALL_ERR, game);
 		else if (game->map[i][j] == 'C')
 			add_object(&game->collect, i, j);
-		else if (game->map[i][j] == 'X')
-			add_object(&game->enemys, i, j);
 		else if (game->map[i][j] == 'E')
 			add_object(&game->exit, i, j);
 		else if (game->map[i][j] == 'P')
