@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:11:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/08 19:10:19 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/11 23:20:04 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@ int	is_valid_chars(t_game *game)
 	if (num_object(game->player) != 1)
 		error_message(PLAYER_ERR, game);
 	if (num_object(game->exit) != 1)
-		error_message(EXIT_ERR, game);
+		error_message(EXIT_NO, game);
 	if (num_object(game->collect) < 1)
 		error_message(COLLECT_ERR, game);
 	if (num_object(game->enemys) < 1)
 		error_message(ENEMY_ERR, game);
+	if (bfs(game, game->exit->cord) == 0)
+		error_message(EXIT_PATH, game);
 	return (1);
 }
 

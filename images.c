@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 10:27:11 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/08 19:09:57 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 06:02:02 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	init_images(t_game *map)
 {
 	t_object	*temp;
 
-	map->mlx = mlx_init(map->width * 80, map->height * 80, "so_long", 1);
+	map->mlx = mlx_init(map->width * 80, (map->height * 80) + 50, "so_long", 1);
 	if (!map->mlx)
 		return ;
 	map->bg = xpm_to_image(map, "./images/bcg.xpm42");
@@ -95,6 +95,21 @@ void	put_images(t_game *game)
 	}
 	temp = game->player;
 	img_window(game->mlx, temp->image, temp->cord[1], temp->cord[0]);
+}
+
+void	scoreboard(t_game *game)
+{
+	char	*score;
+
+	mlx_delete_image(game->mlx, game->score);
+	mlx_delete_image(game->mlx, game->move);
+	game->move = mlx_put_string(game->mlx, "Move :", 20, \
+		game->height * 80 + 10);
+	score = ft_itoa(game->num_move);
+	if (!score)
+		return ;
+	game->score = mlx_put_string(game->mlx, score, 100, game->height * 80 + 10);
+	free(score);
 }
 
 void	img_window(mlx_t *mlx, mlx_image_t	*img, int j, int i)

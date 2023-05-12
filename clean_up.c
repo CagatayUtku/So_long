@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 05:09:20 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/09 02:14:08 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/12 04:37:10 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,37 +44,27 @@ void	free_int_dubleptr(int **ptr, int size)
 
 void	free_all(t_game *game)
 {
-	t_object *del;
-
-	while (game->enemys != NULL)
+	if (game->exit)
 	{
-		del = game->enemys;
-		game->enemys = game->enemys->next;
-		mlx_delete_image(game->mlx, del->image);
-		free(del);
-	}
-	while (game->collect != NULL)
-	{
-		del = game->collect;
-		game->collect = game->collect->next;
-		mlx_delete_image(game->mlx, del->image);
-		free(del);
-	}
-	if (game->player != NULL)
-	{
-		del = game->player;
-		game->player = game->player->next;
-		mlx_delete_image(game->mlx, del->image);
-		free(del);
-	}
-	if (game->exit != NULL)
-	{
-		del = game->exit;
-		game->exit = game->exit->next;
-		mlx_delete_image(game->mlx, del->image);
-		free(del);
 		mlx_delete_image(game->mlx, game->bg);
 		mlx_delete_image(game->mlx, game->wall);
 		free_char_dubleptr(game->map, game->height);
+	}
+	free_objects(game, &game->enemys);
+	free_objects(game, &game->collect);
+	free_objects(game, &game->player);
+	free_objects(game, &game->exit);
+}
+
+void	free_objects(t_game *game, t_object **obj)
+{
+	t_object	*del;
+
+	while (*obj != NULL)
+	{
+		del = *obj;
+		*obj = (*obj)->next;
+		mlx_delete_image(game->mlx, del->image);
+		free(del);
 	}
 }

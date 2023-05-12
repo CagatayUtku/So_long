@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 04:32:16 by Cutku             #+#    #+#             */
-/*   Updated: 2023/05/05 22:27:57 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/05/11 23:12:08 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,14 @@ void	remove_object(t_game *game, t_object **first, int i, int j)
 {
 	t_object	*del;
 	t_object	*tail;
-	int			k;
 
 	del = *first;
 	tail = del;
-	k = 0;
 	while (del)
 	{
 		if (del->cord[0] == i && del->cord[1] == j)
 		{
-			if (k == 0)
+			if (del == *first)
 			{
 				*first = (*first)->next;
 				mlx_delete_image(game->mlx, del->image);
@@ -60,7 +58,6 @@ void	remove_object(t_game *game, t_object **first, int i, int j)
 		}
 		tail = del;
 		del = del->next;
-		++k;
 	}
 }
 
